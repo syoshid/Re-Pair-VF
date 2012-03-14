@@ -1,0 +1,4 @@
+re-pair-VF-best:
+repairアルゴリズムを用いたVF符号--局所最適解に捕まらずに最良のところを見つける
+Shirou Maruyamaさんのソースコードを改変して作成した．
+DEIM 2012
