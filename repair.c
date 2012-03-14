@@ -551,6 +551,7 @@ DICT *createDict(uint txt_len)
   dict->seq_len = 0;
   dict->comp_seq = NULL;
   dict->num_rules = 0;
+  dict->num_usedrules = 0;
 
   for (i = 0; i < dict->buff_size; i++) {
     dict->rule[i].left = DUMMY_CODE;
@@ -623,6 +624,7 @@ DICT *RunRepair(FILE *input, USEDCHARTABLE *ut)
   PAIR *max_pair;
   CODE new_code;
   uint num_loop, num_replaced, cseqlen, numsymbol;
+  double best = DBL_MAX;
 
   rds  = createRDS(input, ut);
   dict = createDict(rds->txt_len);

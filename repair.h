@@ -62,6 +62,7 @@ typedef struct Rule {
 typedef struct Dictionary {
   uint txt_len;
   uint num_rules;
+  uint num_usedrules;
   RULE *rule;
   uint seq_len;
   CODE *comp_seq;
