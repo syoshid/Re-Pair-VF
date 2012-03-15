@@ -70,7 +70,7 @@ void ExpandandWrite(EDICT *dict, OBITFS *obf, CODE cod, uint width){
     ExpandandWrite(dict, obf, dict->rule[cod].left, width);
     ExpandandWrite(dict, obf, dict->rule[cod].right, width);
   }else{
-    obitfs_put(&obf, dict->tcode[cod], width);
+    obitfs_put(obf, dict->tcode[cod], width);
   }
 }
 
