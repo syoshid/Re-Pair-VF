@@ -46,7 +46,7 @@ void encodeCFG_rec(uint code, EDICT *dict, BITOUT *bitout, OBITFS *obf, USEDCHAR
   static uint newcode = CHAR_SIZE;
 
   unsigned int i;
-  unsigned int width = ut->size + dict->num_rules - CHAR_SIZE;
+  unsigned int width = ut->size + dict->num_usedrules - CHAR_SIZE;
   // ˆÈ‰ºClog‚ð‹‚ß‚éD
   width |= width >>  1;
   width |= width >>  2;
@@ -59,9 +59,18 @@ void encodeCFG_rec(uint code, EDICT *dict, BITOUT *bitout, OBITFS *obf, USEDCHAR
   width = (width & 0x00FF00FF) + ((width >>  8) & 0x00FF00FF);
   width = (width & 0x0000FFFF) + ((width >> 16) & 0x0000FFFF);
   
-  for(i = CHAR_SIZE; i < dict->num_rules; i++){
+  for(i = CHAR_SIZE; i < dict->num_usedrules; i++){
     obitfs_put(obf, dict->tcode[dict->rule[i].left],  width);
     obitfs_put(obf, dict->tcode[dict->rule[i].right], width);
+  }
+}
+
+void ExpandandWrite(EDICT *dict, OBITFS *obf, CODE cod, uint width){
+  if(cod >= dict->num_usedrules){
+    ExpandandWrite(dict, obf, dict->rule[cod].left, width);
+    ExpandandWrite(dict, obf, dict->rule[cod].right, width);
+  }else{
+    obitfs_put(&obf, dict->tcode[cod], width);
   }
 }
 
@@ -95,7 +104,7 @@ void EncodeCFG(EDICT *dict, FILE *output, USEDCHARTABLE *ut) {
   obitfs_init(&obf, output);
   encodeCFG_rec(0, dict, bitout, &obf, ut);
   for (i = 0; i < dict->seq_len; i++) {
-    obitfs_put(&obf, dict->tcode[dict->comp_seq[i]], width);
+    ExpandandWrite(dict, &obf, dict->comp_seq[i], width);
   }
   //flushBitout(bitout);
   obitfs_finalize(&obf);

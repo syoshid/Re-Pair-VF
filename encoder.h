@@ -35,6 +35,7 @@ typedef struct EncodeDictionary
   uint txt_len;
   uint seq_len;
   uint num_rules;
+  uint num_usedrules;
   CODE *comp_seq;
   RULE *rule;
   CODE *tcode;

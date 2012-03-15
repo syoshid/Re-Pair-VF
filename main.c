@@ -31,6 +31,7 @@ EDICT *convertDict(DICT *dict, USEDCHARTABLE *ut)
   edict->txt_len = dict->txt_len;
   edict->seq_len = dict->seq_len;
   edict->num_rules = dict->num_rules;
+  edict->num_usedrules = dict->num_usedrules;
   edict->comp_seq = dict->comp_seq;
   edict->rule  = dict->rule;
   edict->tcode = (CODE*)malloc(sizeof(CODE)*dict->num_rules);
