@@ -79,7 +79,7 @@ void EncodeCFG(EDICT *dict, FILE *output, USEDCHARTABLE *ut) {
   BITOUT *bitout;
   OBITFS obf;
 
-  unsigned int width = ut->size + dict->num_rules - CHAR_SIZE;
+  unsigned int width = ut->size + dict->num_usedrules - CHAR_SIZE;
   // ˆÈ‰ºClog‚ð‹‚ß‚éD
   width |= width >> 1;
   width |= width >> 2;
@@ -96,7 +96,7 @@ void EncodeCFG(EDICT *dict, FILE *output, USEDCHARTABLE *ut) {
   printf("Encoding CFG...");
   fflush(stdout);
   fwrite(&(dict->txt_len), sizeof(uint), 1, output);
-  fwrite(&(dict->num_rules), sizeof(uint), 1, output);
+  fwrite(&(dict->num_usedrules), sizeof(uint), 1, output);
   fwrite(&(dict->seq_len), sizeof(uint), 1, output);
   chartable_write(ut, output);
 

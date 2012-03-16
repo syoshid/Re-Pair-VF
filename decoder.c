@@ -27,7 +27,7 @@ char table[CHAR_SIZE];
 uint bufpos = 0;
 
 uint bits (uint n);
-void expandLeaf(RULE *rule, CODE code, FILE *output, USEDCHARTABLE *ut);
+//void expandLeaf(RULE *rule, CODE code, FILE *output, USEDCHARTABLE *ut);
 
 uint bits (uint n)
 { uint b = 0;
@@ -36,9 +36,10 @@ uint bits (uint n)
   return b;
 }
 
-void expandLeaf(RULE *rule, CODE leaf, FILE *output, USEDCHARTABLE *ut) {
+void expandLeaf(RULE *rule, CODE leaf, FILE *output, USEDCHARTABLE *ut, uint *len) {
   if (leaf < ut->size) {
     buffer[bufpos] = rule[leaf].left;
+    (*len)++;
     bufpos++;
     if (bufpos == BUFF_SIZE) {
       fwrite(buffer, 1, BUFF_SIZE, output);
@@ -47,8 +48,8 @@ void expandLeaf(RULE *rule, CODE leaf, FILE *output, USEDCHARTABLE *ut) {
     return;
   }
   else {
-    expandLeaf(rule, rule[leaf].left, output, ut);
-    expandLeaf(rule, rule[leaf].right, output, ut); 
+    expandLeaf(rule, rule[leaf].left, output, ut, len);
+    expandLeaf(rule, rule[leaf].right, output, ut, len); 
     return;
   }
 }
@@ -65,6 +66,7 @@ void DecodeCFG(FILE *input, FILE *output) {
   CODE newcode, leaf;
   uint cod;
   uint bitlen;
+  uint currentlen;
   bool paren;
   uint width = 1; // warning: å„Ç≈åàÇﬂÇÈïKóvÇ™Ç†ÇÈÅD
   USEDCHARTABLE ut;
@@ -110,9 +112,11 @@ void DecodeCFG(FILE *input, FILE *output) {
     rule[i].left  = ibitfs_get(&ibfs, width);
     rule[i].right = ibitfs_get(&ibfs, width);
   }
-  for(i = 0; i < seq_len; i++){
+  currentlen = 0;
+//  for(i = 0; i < seq_len; i++){
+  while(currentlen < txt_len){
     cod = ibitfs_get(&ibfs, width);
-    expandLeaf(rule, (CODE) cod, output, &ut);
+    expandLeaf(rule, (CODE) cod, output, &ut, &currentlen);
   }
   fwrite(buffer, 1, bufpos, output);
   printf("Finished!\n");

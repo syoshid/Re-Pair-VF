@@ -552,7 +552,6 @@ DICT *createDict(uint txt_len)
   dict->seq_len = 0;
   dict->comp_seq = NULL;
   dict->num_rules = 0;
-  dict->num_usedrules = 0;
 
   for (i = 0; i < dict->buff_size; i++) {
     dict->rule[i].left = DUMMY_CODE;
@@ -564,6 +563,7 @@ DICT *createDict(uint txt_len)
     dict->rule[i].right = DUMMY_CODE;
     dict->num_rules++;
   }
+  dict->num_usedrules = dict->num_rules;
 
   return dict;
 }
