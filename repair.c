@@ -636,12 +636,12 @@ DICT *RunRepair(FILE *input, USEDCHARTABLE *ut)
   while ((max_pair = getMaxPair(rds)) != NULL) {
     numsymbol = ut->size + dict->num_rules - CHAR_SIZE;
     // size = (2 * dict->num_rules + cseqlen) * log(numsymbol);
-    if((log(numsymbol) * max_pair->freq < 
-	2 * (log(numsymbol + 1)) + 
+    if((ceil(log(numsymbol)) * max_pair->freq < 
+	2 * (ceil(log(numsymbol + 1))) + 
 	(((numsymbol - ut->size) * 2)
-	 + (cseqlen - max_pair->freq)) * (log(numsymbol+1) - log(numsymbol))) 
-	&& ((2 * dict->num_rules + cseqlen) * log(numsymbol) < best)){
-	best = (2 * dict->num_rules + cseqlen) * log(numsymbol);
+	 + (cseqlen - max_pair->freq)) * (ceil(log(numsymbol+1)) - ceil(log(numsymbol)))) 
+	&& ((2 * dict->num_rules + cseqlen) * ceil(log(numsymbol)) < best)){
+	best = (2 * dict->num_rules + cseqlen) * ceil(log(numsymbol));
 	dict->num_usedrules = dict->num_rules;
     }
     new_code = addNewPair(dict, max_pair);
@@ -649,7 +649,7 @@ DICT *RunRepair(FILE *input, USEDCHARTABLE *ut)
     //num_replaced += replacePairs(rds, max_pair, new_code);
     cseqlen -= replacePairs(rds, max_pair, new_code);
   }
-  if((2 * dict->num_rules + cseqlen) * log(ut->size + dict->num_rules - CHAR_SIZE) < best){
+  if((2 * dict->num_rules + cseqlen) * ceil(log(ut->size + dict->num_rules - CHAR_SIZE)) < best){
     dict->num_usedrules = dict->num_rules;
   }
   getCompSeq(rds, dict);
