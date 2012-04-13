@@ -636,12 +636,14 @@ DICT *RunRepair(FILE *input, USEDCHARTABLE *ut)
   while ((max_pair = getMaxPair(rds)) != NULL) {
     numsymbol = ut->size + dict->num_rules - CHAR_SIZE;
     // size = (2 * dict->num_rules + cseqlen) * log(numsymbol);
-    if((ceil(log(numsymbol)) * max_pair->freq < 
-	2 * (ceil(log(numsymbol + 1))) + 
-	(((numsymbol - ut->size) * 2)
-	 + (cseqlen - max_pair->freq)) * (ceil(log(numsymbol+1)) - ceil(log(numsymbol)))) 
-	&& ((2 * dict->num_rules + cseqlen) * ceil(log(numsymbol)) < best)){
-	best = (2 * dict->num_rules + cseqlen) * ceil(log(numsymbol));
+    if((ceil(log(numsymbol)/log(2.0)) * max_pair->freq <  // 減る分
+	2 * (ceil(log(numsymbol + 1)/log(2.0))) + // 辞書に追加する記号の対の分
+	(((numsymbol - ut->size) * 2) // 辞書の記号が「太る」分
+	 + (cseqlen - max_pair->freq)) * (ceil(log(numsymbol+1)/log(2.0)) - ceil(log(numsymbol)/log(2.0)))) // 圧縮記号列の記号が「太る」分
+	// つまり、これは極小である場合。
+	&& ((2 * (dict->num_rules - CHAR_SIZE) + cseqlen) * ceil(log(numsymbol)/log(2.0)) < best)){
+      // ここで最小であることがわかった。
+	best = (2 * (dict->num_rules - CHAR_SIZE) + cseqlen) * ceil(log(numsymbol)/log(2.0));
 	dict->num_usedrules = dict->num_rules;
     }
     new_code = addNewPair(dict, max_pair);
@@ -649,7 +651,7 @@ DICT *RunRepair(FILE *input, USEDCHARTABLE *ut)
     //num_replaced += replacePairs(rds, max_pair, new_code);
     cseqlen -= replacePairs(rds, max_pair, new_code);
   }
-  if((2 * dict->num_rules + cseqlen) * ceil(log(ut->size + dict->num_rules - CHAR_SIZE)) < best){
+  if((2 * (dict->num_rules - CHAR_SIZE) + cseqlen) * ceil(log(ut->size + dict->num_rules - CHAR_SIZE)/log(2.0)) < best){
     dict->num_usedrules = dict->num_rules;
   }
   getCompSeq(rds, dict);
