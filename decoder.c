@@ -81,16 +81,17 @@ void DecodeCFG(FILE *input, FILE *output) {
 
   // width Œˆ’è‚·‚éD
   width = ut.size + num_rules - CHAR_SIZE;
-  width |= width >> 1;
-  width |= width >> 2;
-  width |= width >> 4;
-  width |= width >> 8;
-  width |= width >> 16;
-  width = (width & 0x55555555) + ((width >>  1) & 0x55555555);
-  width = (width & 0x33333333) + ((width >>  2) & 0x33333333);
-  width = (width & 0x0F0F0F0F) + ((width >>  4) & 0x0F0F0F0F);
-  width = (width & 0x00FF00FF) + ((width >>  8) & 0x00FF00FF);
-  width = (width & 0x0000FFFF) + ((width >> 16) & 0x0000FFFF);
+  width = ceil(log(width)/log(2.0));
+  //width |= width >> 1;
+  //width |= width >> 2;
+  //width |= width >> 4;
+  //width |= width >> 8;
+  //width |= width >> 16;
+  //width = (width & 0x55555555) + ((width >>  1) & 0x55555555);
+  //width = (width & 0x33333333) + ((width >>  2) & 0x33333333);
+  //width = (width & 0x0F0F0F0F) + ((width >>  4) & 0x0F0F0F0F);
+  //width = (width & 0x00FF00FF) + ((width >>  8) & 0x00FF00FF);
+  //width = (width & 0x0000FFFF) + ((width >> 16) & 0x0000FFFF);
 
   // rule‰Šú’l‚Ì“Ç‚İ‚İ
   rule = (RULE*)malloc(sizeof(RULE)*num_rules);

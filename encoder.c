@@ -48,16 +48,17 @@ void encodeCFG_rec(uint code, EDICT *dict, BITOUT *bitout, OBITFS *obf, USEDCHAR
   unsigned int i;
   unsigned int width = ut->size + dict->num_usedrules - CHAR_SIZE;
   // 以下，logを求める．
-  width |= width >>  1;
-  width |= width >>  2;
-  width |= width >>  4;
-  width |= width >>  8;
-  width |= width >> 16;
-  width = (width & 0x55555555) + ((width >>  1) & 0x55555555);
-  width = (width & 0x33333333) + ((width >>  2) & 0x33333333);
-  width = (width & 0x0F0F0F0F) + ((width >>  4) & 0x0F0F0F0F);
-  width = (width & 0x00FF00FF) + ((width >>  8) & 0x00FF00FF);
-  width = (width & 0x0000FFFF) + ((width >> 16) & 0x0000FFFF);
+  width = ceil(log(width)/log(2.0));
+  //width |= width >>  1;
+  //width |= width >>  2;
+  //width |= width >>  4;
+  //width |= width >>  8;
+  //width |= width >> 16;
+  //width = (width & 0x55555555) + ((width >>  1) & 0x55555555);
+  //width = (width & 0x33333333) + ((width >>  2) & 0x33333333);
+  //width = (width & 0x0F0F0F0F) + ((width >>  4) & 0x0F0F0F0F);
+  //width = (width & 0x00FF00FF) + ((width >>  8) & 0x00FF00FF);
+  //width = (width & 0x0000FFFF) + ((width >> 16) & 0x0000FFFF);
   
   for(i = CHAR_SIZE; i < dict->num_usedrules; i++){
     obitfs_put(obf, dict->tcode[dict->rule[i].left],  width);
@@ -81,16 +82,17 @@ void EncodeCFG(EDICT *dict, FILE *output, USEDCHARTABLE *ut) {
 
   unsigned int width = ut->size + dict->num_usedrules - CHAR_SIZE;
   // 以下，logを求める．
-  width |= width >> 1;
-  width |= width >> 2;
-  width |= width >> 4;
-  width |= width >> 8;
-  width |= width >> 16;
-  width = (width & 0x55555555) + ((width >>  1) & 0x55555555);
-  width = (width & 0x33333333) + ((width >>  2) & 0x33333333);
-  width = (width & 0x0F0F0F0F) + ((width >>  4) & 0x0F0F0F0F);
-  width = (width & 0x00FF00FF) + ((width >>  8) & 0x00FF00FF);
-  width = (width & 0x0000FFFF) + ((width >> 16) & 0x0000FFFF);
+  //width |= width >> 1;
+  //width |= width >> 2;
+  //width |= width >> 4;
+  //width |= width >> 8;
+  //width |= width >> 16;
+  //width = (width & 0x55555555) + ((width >>  1) & 0x55555555);
+  //width = (width & 0x33333333) + ((width >>  2) & 0x33333333);
+  //width = (width & 0x0F0F0F0F) + ((width >>  4) & 0x0F0F0F0F);
+  //width = (width & 0x00FF00FF) + ((width >>  8) & 0x00FF00FF);
+  //width = (width & 0x0000FFFF) + ((width >> 16) & 0x0000FFFF);
+  width = ceil(log(width)/log(2.0));
   
 
   printf("Encoding CFG...");
