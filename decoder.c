@@ -81,7 +81,7 @@ void DecodeCFG(FILE *input, FILE *output) {
 
   // width Œˆ’è‚·‚éD
   width = ut.size + num_rules - CHAR_SIZE;
-  width = ceil(log(width)/log(2.0));
+  if(width >= 1) width = ceil(log(width)/log(2.0));
   //width |= width >> 1;
   //width |= width >> 2;
   //width |= width >> 4;

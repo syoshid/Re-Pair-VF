@@ -625,6 +625,7 @@ DICT *RunRepair(FILE *input, USEDCHARTABLE *ut)
   PAIR *max_pair;
   CODE new_code;
   uint num_replaced, cseqlen, numsymbol;
+  uint width;
   double best = DBL_MAX;
 
   rds  = createRDS(input, ut);
@@ -636,9 +637,11 @@ DICT *RunRepair(FILE *input, USEDCHARTABLE *ut)
   while ((max_pair = getMaxPair(rds)) != NULL) {
     numsymbol = ut->size + dict->num_rules - CHAR_SIZE;
     // size = (2 * dict->num_rules + cseqlen) * log(numsymbol);
-    if(((2 * (dict->num_rules - CHAR_SIZE) + cseqlen) * ceil(log((double)numsymbol)/log(2.0)) < best)){
+    width = numsymbol;
+    if(width >= 2) width = ceil(log((double)numsymbol)/log(2.0));
+    if(((2 * (dict->num_rules - CHAR_SIZE) + cseqlen) * width < best)){
       // ここで最小であることがわかった。
-	best = (2 * (dict->num_rules - CHAR_SIZE) + cseqlen) * ceil(log((double)numsymbol)/log(2.0));
+	best = (2 * (dict->num_rules - CHAR_SIZE) + cseqlen) * width;
 	dict->num_usedrules = dict->num_rules;
     }
     new_code = addNewPair(dict, max_pair);
@@ -646,9 +649,11 @@ DICT *RunRepair(FILE *input, USEDCHARTABLE *ut)
     //num_replaced += replacePairs(rds, max_pair, new_code);
     cseqlen -= replacePairs(rds, max_pair, new_code);
   }
-  if((2 * (dict->num_rules - CHAR_SIZE) + cseqlen) * ceil(log((double)(ut->size + dict->num_rules - CHAR_SIZE))/log(2.0)) < best){
+  width = ut->size + dict->num_rules - CHAR_SIZE;
+  if(width >= 2) width = ceil(log((double)numsymbol)/log(2.0));
+  if((2 * (dict->num_rules - CHAR_SIZE) + cseqlen) * width < best){
     dict->num_usedrules = dict->num_rules;
-    best = (2 * (dict->num_rules - CHAR_SIZE) + cseqlen) * ceil(log((double)(ut->size + dict->num_rules - CHAR_SIZE))/log(2.0));
+    best = (2 * (dict->num_rules - CHAR_SIZE) + cseqlen) * width;
   }
   getCompSeq(rds, dict);
   destructRDS(rds);

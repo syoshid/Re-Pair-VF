@@ -48,7 +48,7 @@ void encodeCFG_rec(uint code, EDICT *dict, BITOUT *bitout, OBITFS *obf, USEDCHAR
   unsigned int i;
   unsigned int width = ut->size + dict->num_usedrules - CHAR_SIZE;
   // ˆÈ‰ºClog‚ð‹‚ß‚éD
-  width = ceil(log(width)/log(2.0));
+  if(width >= 1) width = ceil(log(width)/log(2.0));
   //width |= width >>  1;
   //width |= width >>  2;
   //width |= width >>  4;
@@ -92,8 +92,7 @@ void EncodeCFG(EDICT *dict, FILE *output, USEDCHARTABLE *ut) {
   //width = (width & 0x0F0F0F0F) + ((width >>  4) & 0x0F0F0F0F);
   //width = (width & 0x00FF00FF) + ((width >>  8) & 0x00FF00FF);
   //width = (width & 0x0000FFFF) + ((width >> 16) & 0x0000FFFF);
-  width = ceil(log(width)/log(2.0));
-  
+  if(width >= 1) width = ceil(log(width)/log(2.0));
 
   printf("Encoding CFG...");
   fflush(stdout);
