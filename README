@@ -1,4 +1,5 @@
-re-pair-VF-best:
-repairアルゴリズムを用いたVF符号--局所最適解に捕まらずに最良のところを見つける
-Shirou Maruyamaさんのソースコードを改変して作成した．
-DEIM 2012
+Re-Pair-VF-best:
+A variable-length-to-fixed-length coding using Re-Pair algorithm. 
+
+Reference:
+Satoshi Yoshida and Takuya Kida, Effective Variable-Length-to-Fixed-Length Coding via a Re-Pair Algorithm, In Proc. of Data Compression Conference 2013 (DCC 2013), p. 532, Snowbird, Utah, USA, March 2013.
