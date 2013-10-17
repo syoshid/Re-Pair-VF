@@ -35,7 +35,7 @@ cfg2enc: main.c encoder.o bits.o
 	$(CC) $(CFLAGS) -DCFG2ENC -o $@ main.c encoder.o bits.o $(LIB)
 
 TAGS: $(SRCS)
-	etags *.{c,h}
+	etags *.c *.h
 
 clean:
 	-rm -f $(REPAIR) $(CFG) $(OBJS)  *~
